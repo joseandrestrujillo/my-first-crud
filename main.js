@@ -12,17 +12,6 @@
  const edit = document.querySelector("#edit-form")
  let arrayElements = [];
 
- function eliminarIndice(index){
-     arrayIndex.forEach((value, indice)=>{
-        if(indice > index){
-            aux = value;
-            value = arrayIndex[indice - 1];
-            arrayIndex[indice - 1] = aux;
-        }
-     });
-     arrayIndex.pop();
- }
-
  function updateList(){
      edit.innerHTML = "";
      lista.innerHTML = "";

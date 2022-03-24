@@ -10,26 +10,40 @@
  const areaTexto = document.querySelector("#text-area");
  const lista = document.querySelector("#list");
  const edit = document.querySelector("#edit-form")
- let arrayIndex = [];
- let elements = {};
- let currentIndex = 0;
- 
+ let arrayElements = [];
+
+ function eliminarIndice(index){
+     arrayIndex.forEach((value, indice)=>{
+        if(indice > index){
+            aux = value;
+            value = arrayIndex[indice - 1];
+            arrayIndex[indice - 1] = aux;
+        }
+     });
+     arrayIndex.pop();
+ }
+
  function updateList(){
      edit.innerHTML = "";
      lista.innerHTML = "";
-     arrayIndex.forEach((item, index)=>{
-         lista.innerHTML += ` <li id="li-${item}" class="list-element">${elements[item]}<button class="delete" onclick="deleteElement(${item})">x</button><button class="open-edit" onclick="openEdit(${item})">Edit</button></li>`
+     arrayElements.forEach((item, index)=>{
+         lista.innerHTML += ` <li id="li-${index}" class="list-element">${item}<button class="delete" onclick="deleteElement(${index})">x</button><button class="open-edit" onclick="openEdit(${index})">Edit</button></li>`
      })
  }
  function addElement() {
      let title = areaTexto.value;
-     elements[currentIndex] = title;
-     arrayIndex.push(currentIndex);
-     currentIndex++;
+     arrayElements.push(title);
      updateList();
  }
  function deleteElement(index) {
-     arrayIndex = arrayIndex.filter(e => e!= index);
+    arrayElements.forEach((value, indice)=>{
+        if(indice > index){
+            aux = value;
+            value = arrayElements[indice - 1];
+            arrayElements[indice - 1] = aux;
+        }
+     });
+     arrayElements.pop();
      updateList();
  }
 
@@ -41,6 +55,6 @@
     `
  }
  function submitEdit(index){
-    elements[index] = document.querySelector("#input-name").value;
+    arrayElements[index] = document.querySelector("#input-name").value;
     updateList();
  }

@@ -12,16 +12,34 @@
  const edit = document.querySelector("#edit-form")
  let arrayElements = [];
 
+class Elemento {
+    constructor(content){
+        this.content = content;
+        this.checked = false;
+    }
+    updateCheck(){
+        this.checked = !this.checked;
+    }
+}
+
  function updateList(){
      edit.innerHTML = "";
      lista.innerHTML = "";
      arrayElements.forEach((item, index)=>{
-         lista.innerHTML += ` <li id="li-${index}" class="list-element">${item}<button class="delete" onclick="deleteElement(${index})">x</button><button class="open-edit" onclick="openEdit(${index})">Edit</button></li>`
+         lista.innerHTML += `
+                <li id="li-${index}" class="list-element">
+                    ${item.content}
+                    <input type="checkbox" id="complete" onclick="arrayElements[${index}].updateCheck()">
+                    <button class="delete" onclick="deleteElement(${index})">x</button>
+                    <button class="open-edit" onclick="openEdit(${index})">Edit</button>
+                </li>
+            `
      })
  }
  function addElement() {
      let title = areaTexto.value;
-     arrayElements.push(title);
+     let element = new Elemento(title);
+     arrayElements.push(element);
      updateList();
  }
  function deleteElement(index) {
@@ -44,6 +62,6 @@
     `
  }
  function submitEdit(index){
-    arrayElements[index] = document.querySelector("#input-name").value;
+    arrayElements[index].content = document.querySelector("#input-name").value;
     updateList();
  }

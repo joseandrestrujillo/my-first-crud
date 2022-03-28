@@ -22,19 +22,43 @@ class Elemento {
     }
 }
 
- function updateList(){
+ function updateList(vectorMostrar = undefined){
      edit.innerHTML = "";
      lista.innerHTML = "";
-     arrayElements.forEach((item, index)=>{
-         lista.innerHTML += `
-                <li id="li-${index}" class="list-element">
-                    ${item.content}
-                    <input type="checkbox" id="complete" onclick="arrayElements[${index}].updateCheck()">
+     if(vectorMostrar === undefined){
+        arrayElements.forEach((item, index)=>{
+            let li = document.createElement("li");
+                li.innerHTML = `
+                ${item.content}
+                    <input type="checkbox" id="complete-${index}" onclick="arrayElements[${index}].updateCheck()">
                     <button class="delete" onclick="deleteElement(${index})">x</button>
                     <button class="open-edit" onclick="openEdit(${index})">Edit</button>
-                </li>
-            `
-     })
+                `;
+                lista.appendChild(li);
+               if(item.checked){
+                    const strCheck = `#complete-${index}`;
+                    document.querySelector(strCheck).checked = true;
+                }
+        });
+     }else{
+        arrayElements.forEach((item, index)=>{
+            if(vectorMostrar[index]){
+                let li = document.createElement("li");
+                li.innerHTML = `
+                ${item.content}
+                    <input type="checkbox" id="complete-${index}" onclick="arrayElements[${index}].updateCheck()">
+                    <button class="delete" onclick="deleteElement(${index})">x</button>
+                    <button class="open-edit" onclick="openEdit(${index})">Edit</button>
+                `;
+                lista.appendChild(li);
+               if(item.checked){
+                    const strCheck = `#complete-${index}`;
+                    document.querySelector(strCheck).checked = true;
+                }
+            }
+        })
+     }
+     
  }
  function addElement() {
      let title = areaTexto.value;
@@ -64,4 +88,18 @@ class Elemento {
  function submitEdit(index){
     arrayElements[index].content = document.querySelector("#input-name").value;
     updateList();
+ }
+ function filtrar(){
+    const check = document.querySelector("#filterCheck").checked;
+    const search = document.querySelector("#text-filter").value;
+    let vectorMostrar =[];
+    console.log(arrayElements);
+    arrayElements.forEach((value) => {
+        if((value.content.includes(search)) | (value.checked === check)){
+            vectorMostrar.push(true);
+        }else{
+            vectorMostrar.push(false);
+        }
+    });
+    updateList(vectorMostrar);
  }

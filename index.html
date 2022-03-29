@@ -11,16 +11,19 @@
         <h1>Mi primer CRUD</h1>
     </header>
     <main class="main-container">
-        <section class="filters">
-            <label for="checked">Completada</label>
-            <input type="checkbox" name="checked" id="filterCheck"><br>
-            <input type="text" id="text-filter" class="text-filter">
-            <button id="filterBtn" class="filter-btn" onclick="filtrar()">Apply filter</button>
-        </section>
-        <input type="text" id="text-area" class="text">
-        <button id="add-btn" class="add" onclick="addElement()">ADD</button>
-        <ul id="list" class="list-container">
-        </ul>
+        <form id="filters">
+            Completada:
+            <input type="radio" name="complete" value="both" checked/> Ambas
+            <input type="radio" name="complete" value="complete" /> Si
+            <input type="radio" name="complete" value="incomplete" /> No<br>
+            <input type="text" id="text-filter" class="text-filter" placeholder="Buscar palabra...">
+            <button id="filterBtn" class="filter-btn">Apply filter</button>
+        </form>
+        <form id="addform">
+            <input type="text" id="text-area" class="text" placeholder="Introduzca la tarea...">
+            <button id="add-btn" class="add">ADD</button>
+        </form>
+        <ul id="list" class="list-container"></ul>
     </main>
     <div id="edit-form"></div>
     <script src="main.js"></script>

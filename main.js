@@ -7,18 +7,41 @@
  * -Buscador de palabras.
  * -Todo debe guardarse en el localStorage
  */
- const areaTexto = document.querySelector("#text-area");
- const lista = document.querySelector("#list");
- const edit = document.querySelector("#edit-form")
- let arrayElements = [];
+const areaTexto = document.querySelector("#text-area");
+const lista = document.querySelector("#list");
+const edit = document.querySelector("#edit-form");
+const filterForm = document.querySelector("#filters");
+const addForm = document.querySelector("#addform");
+let arrayElements = [];
 
+if ((typeof(Storage) !== "undefined") & (JSON.parse(localStorage.getItem("lista-crud")) !== null)) {
+    arrayElements = JSON.parse(localStorage.getItem("lista-crud"));
+}
+
+
+updateList();
+
+filterForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    filtrar();
+});
+
+addForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    addElement();
+    areaTexto.value = "";
+});
 class Elemento {
     constructor(content){
         this.content = content;
         this.checked = false;
     }
-    updateCheck(){
-        this.checked = !this.checked;
+}
+
+function updateCheck(elemento){
+    elemento.checked = !elemento.checked;
+    if (typeof(Storage) !== "undefined"){
+        localStorage.setItem("lista-crud", JSON.stringify(arrayElements));
     }
 }
 
@@ -30,7 +53,7 @@ class Elemento {
             let li = document.createElement("li");
                 li.innerHTML = `
                 ${item.content}
-                    <input type="checkbox" id="complete-${index}" onclick="arrayElements[${index}].updateCheck()">
+                    <input type="checkbox" id="complete-${index}" onclick="updateCheck(arrayElements[${index}])">
                     <button class="delete" onclick="deleteElement(${index})">x</button>
                     <button class="open-edit" onclick="openEdit(${index})">Edit</button>
                 `;
@@ -46,7 +69,7 @@ class Elemento {
                 let li = document.createElement("li");
                 li.innerHTML = `
                 ${item.content}
-                    <input type="checkbox" id="complete-${index}" onclick="arrayElements[${index}].updateCheck()">
+                    <input type="checkbox" id="complete-${index}" onclick="updateCheck(arrayElements[${index}])">
                     <button class="delete" onclick="deleteElement(${index})">x</button>
                     <button class="open-edit" onclick="openEdit(${index})">Edit</button>
                 `;
@@ -65,6 +88,9 @@ class Elemento {
      let element = new Elemento(title);
      arrayElements.push(element);
      updateList();
+     if (typeof(Storage) !== "undefined"){
+         localStorage.setItem("lista-crud", JSON.stringify(arrayElements));
+     }
  }
  function deleteElement(index) {
     arrayElements.forEach((value, indice)=>{
@@ -76,6 +102,9 @@ class Elemento {
      });
      arrayElements.pop();
      updateList();
+    if (typeof(Storage) !== "undefined"){
+        localStorage.setItem("lista-crud", JSON.stringify(arrayElements));
+    }
  }
 
  function openEdit(index){
@@ -88,14 +117,30 @@ class Elemento {
  function submitEdit(index){
     arrayElements[index].content = document.querySelector("#input-name").value;
     updateList();
+    if (typeof(Storage) !== "undefined"){
+        localStorage.setItem("lista-crud", JSON.stringify(arrayElements));
+    }
+ }
+ function parseBool(complete){
+     switch(complete){
+         case "both":{
+             return "both";
+         }break;
+         case "complete":{
+             return true;
+         }break;
+         case "incomplete":{
+             return false;
+         }break;
+     }
  }
  function filtrar(){
-    const check = document.querySelector("#filterCheck").checked;
+    let complete = document.querySelector('input[name="complete"]:checked').value;
     const search = document.querySelector("#text-filter").value;
     let vectorMostrar =[];
-    console.log(arrayElements);
+    complete = parseBool(complete);
     arrayElements.forEach((value) => {
-        if((value.content.includes(search)) | (value.checked === check)){
+        if((value.content.includes(search)) & (complete === "both" ? (true) : (value.checked === complete))){
             vectorMostrar.push(true);
         }else{
             vectorMostrar.push(false);

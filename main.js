@@ -1,21 +1,21 @@
 /**
- * El CRUD debe contener:
- * -Opción de añadir un elemento nuevo.
- * -Opción de eliminar un elemento ya existente.
- * -Opción de editar un elemento existente.
- * -Filtro de realizado o no realizado.
- * -Buscador de palabras.
- * -Todo debe guardarse en el localStorage
+The CRUD must includes:
+- Add a new item option.
+- Delete an existing item.
+- Edit an existing item.
+- Possibly to mark an item as complete.
+- Filter option to search items by a word or if there are completed or not.
+- All items will be save on the localStorage.
  */
-const areaTexto = document.querySelector("#text-area");
-const lista = document.querySelector("#list");
+const textArea = document.querySelector("#text-area");
+const list = document.querySelector("#list");
 const edit = document.querySelector("#edit-form");
 const filterForm = document.querySelector("#filters");
 const addForm = document.querySelector("#addform");
 let arrayElements = [];
 
-if ((typeof(Storage) !== "undefined") & (JSON.parse(localStorage.getItem("lista-crud")) !== null)) {
-    arrayElements = JSON.parse(localStorage.getItem("lista-crud"));
+if ((typeof(Storage) !== "undefined") & (JSON.parse(localStorage.getItem("list-crud")) !== null)) {
+    arrayElements = JSON.parse(localStorage.getItem("list-crud"));
 }
 
 
@@ -23,32 +23,32 @@ updateList();
 
 filterForm.addEventListener("submit", (e) => {
     e.preventDefault();
-    filtrar();
+    filter();
 });
 
 addForm.addEventListener("submit", (e) => {
     e.preventDefault();
     addElement();
-    areaTexto.value = "";
+    textArea.value = "";
 });
-class Elemento {
+class Element {
     constructor(content){
         this.content = content;
         this.checked = false;
     }
 }
 
-function updateCheck(elemento){
-    elemento.checked = !elemento.checked;
+function updateCheck(element){
+    element.checked = !element.checked;
     if (typeof(Storage) !== "undefined"){
-        localStorage.setItem("lista-crud", JSON.stringify(arrayElements));
+        localStorage.setItem("list-crud", JSON.stringify(arrayElements));
     }
 }
 
- function updateList(vectorMostrar = undefined){
+ function updateList(showVector = undefined){
      edit.innerHTML = "";
-     lista.innerHTML = "";
-     if(vectorMostrar === undefined){
+     list.innerHTML = "";
+     if(showVector === undefined){
         arrayElements.forEach((item, index)=>{
             let li = document.createElement("li");
                 li.innerHTML = `
@@ -57,7 +57,7 @@ function updateCheck(elemento){
                     <button class="delete" onclick="deleteElement(${index})">x</button>
                     <button class="open-edit" onclick="openEdit(${index})">Edit</button>
                 `;
-                lista.appendChild(li);
+                list.appendChild(li);
                if(item.checked){
                     const strCheck = `#complete-${index}`;
                     document.querySelector(strCheck).checked = true;
@@ -65,7 +65,7 @@ function updateCheck(elemento){
         });
      }else{
         arrayElements.forEach((item, index)=>{
-            if(vectorMostrar[index]){
+            if(showVector[index]){
                 let li = document.createElement("li");
                 li.innerHTML = `
                 ${item.content}
@@ -73,7 +73,7 @@ function updateCheck(elemento){
                     <button class="delete" onclick="deleteElement(${index})">x</button>
                     <button class="open-edit" onclick="openEdit(${index})">Edit</button>
                 `;
-                lista.appendChild(li);
+                list.appendChild(li);
                if(item.checked){
                     const strCheck = `#complete-${index}`;
                     document.querySelector(strCheck).checked = true;
@@ -84,12 +84,12 @@ function updateCheck(elemento){
      
  }
  function addElement() {
-     let title = areaTexto.value;
-     let element = new Elemento(title);
+     let title = textArea.value;
+     let element = new Element(title);
      arrayElements.push(element);
      updateList();
      if (typeof(Storage) !== "undefined"){
-         localStorage.setItem("lista-crud", JSON.stringify(arrayElements));
+         localStorage.setItem("list-crud", JSON.stringify(arrayElements));
      }
  }
  function deleteElement(index) {
@@ -103,7 +103,7 @@ function updateCheck(elemento){
      arrayElements.pop();
      updateList();
     if (typeof(Storage) !== "undefined"){
-        localStorage.setItem("lista-crud", JSON.stringify(arrayElements));
+        localStorage.setItem("list-crud", JSON.stringify(arrayElements));
     }
  }
 
@@ -118,7 +118,7 @@ function updateCheck(elemento){
     arrayElements[index].content = document.querySelector("#input-name").value;
     updateList();
     if (typeof(Storage) !== "undefined"){
-        localStorage.setItem("lista-crud", JSON.stringify(arrayElements));
+        localStorage.setItem("list-crud", JSON.stringify(arrayElements));
     }
  }
  function parseBool(complete){
@@ -134,17 +134,17 @@ function updateCheck(elemento){
          }break;
      }
  }
- function filtrar(){
+ function filter(){
     let complete = document.querySelector('input[name="complete"]:checked').value;
     const search = document.querySelector("#text-filter").value;
-    let vectorMostrar =[];
+    let showVector =[];
     complete = parseBool(complete);
     arrayElements.forEach((value) => {
         if((value.content.includes(search)) & (complete === "both" ? (true) : (value.checked === complete))){
-            vectorMostrar.push(true);
+            showVector.push(true);
         }else{
-            vectorMostrar.push(false);
+            showVector.push(false);
         }
     });
-    updateList(vectorMostrar);
+    updateList(showVector);
  }

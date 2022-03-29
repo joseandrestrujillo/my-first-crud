@@ -51,11 +51,16 @@ function updateCheck(element){
      if(showVector === undefined){
         arrayElements.forEach((item, index)=>{
             let li = document.createElement("li");
+            li.classList = "card d-flex flex-row align-items-center justify-content-between p-4 m-2";
                 li.innerHTML = `
-                ${item.content}
-                    <input type="checkbox" id="complete-${index}" onclick="updateCheck(arrayElements[${index}])">
-                    <button class="delete" onclick="deleteElement(${index})">x</button>
-                    <button class="open-edit" onclick="openEdit(${index})">Edit</button>
+                    <span class="font-monospace card-title fs-5 text-center fw-bold">
+                        ${item.content}
+                    </span>
+                    <span class="form-switch d-flex align-items-center">
+                        <input type="checkbox" class="form-check-input m-1" id="complete-${index}" onclick="updateCheck(arrayElements[${index}])">
+                        <button class="btn btn-danger m-1" onclick="deleteElement(${index})">x</button>
+                        <button class="btn btn-success m-1" onclick="openEdit(${index})">Edit</button>
+                    </span>
                 `;
                 list.appendChild(li);
                if(item.checked){
@@ -67,11 +72,16 @@ function updateCheck(element){
         arrayElements.forEach((item, index)=>{
             if(showVector[index]){
                 let li = document.createElement("li");
+                li.classList = "card d-flex flex-row align-items-center justify-content-between p-4 m-2";
                 li.innerHTML = `
-                ${item.content}
-                    <input type="checkbox" id="complete-${index}" onclick="updateCheck(arrayElements[${index}])">
-                    <button class="delete" onclick="deleteElement(${index})">x</button>
-                    <button class="open-edit" onclick="openEdit(${index})">Edit</button>
+                    <span class="font-monospace card-title fs-5 text-center fw-bold">
+                        ${item.content}
+                    </span>
+                    <span class="form-switch d-flex align-items-center">
+                        <input type="checkbox" class="form-check-input m-1" id="complete-${index}" onclick="updateCheck(arrayElements[${index}])">
+                        <button class="btn btn-danger m-1" onclick="deleteElement(${index})">x</button>
+                        <button class="btn btn-success m-1" onclick="openEdit(${index})">Edit</button>
+                    </span>
                 `;
                 list.appendChild(li);
                if(item.checked){

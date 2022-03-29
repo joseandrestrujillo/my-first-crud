@@ -44,50 +44,39 @@ function updateCheck(element){
         localStorage.setItem("list-crud", JSON.stringify(arrayElements));
     }
 }
-
+function renderCard(item, index){
+    let li = document.createElement("li");
+    li.id = `li-${index}`;
+    li.classList = "card m-0 mt-2 mb-2 bg-dark";
+    li.innerHTML = `
+        <div class="bg-light d-flex flex-row align-items-center justify-content-between p-4 m-0">
+            <span class="font-monospace card-title fs-5 text-center fw-bold">
+                ${item.content}
+            </span>
+            <span class="form-switch d-flex align-items-center">
+                <input type="checkbox" class="form-check-input m-1" id="complete-${index}" onclick="updateCheck(arrayElements[${index}])">
+                <button class="btn btn-danger m-1" onclick="deleteElement(${index})">x</button>
+                <button class="btn btn-success m-1" onclick="openEdit(${index}, '${li.id}')">Edit</button>
+            </span>
+        </div>
+    `;
+    list.appendChild(li);
+    if(item.checked){
+        const strCheck = `#complete-${index}`;
+        document.querySelector(strCheck).checked = true;
+    }
+}
  function updateList(showVector = undefined){
      edit.innerHTML = "";
      list.innerHTML = "";
      if(showVector === undefined){
         arrayElements.forEach((item, index)=>{
-            let li = document.createElement("li");
-            li.classList = "card d-flex flex-row align-items-center justify-content-between p-4 m-2";
-                li.innerHTML = `
-                    <span class="font-monospace card-title fs-5 text-center fw-bold">
-                        ${item.content}
-                    </span>
-                    <span class="form-switch d-flex align-items-center">
-                        <input type="checkbox" class="form-check-input m-1" id="complete-${index}" onclick="updateCheck(arrayElements[${index}])">
-                        <button class="btn btn-danger m-1" onclick="deleteElement(${index})">x</button>
-                        <button class="btn btn-success m-1" onclick="openEdit(${index})">Edit</button>
-                    </span>
-                `;
-                list.appendChild(li);
-               if(item.checked){
-                    const strCheck = `#complete-${index}`;
-                    document.querySelector(strCheck).checked = true;
-                }
+            renderCard(item, index);
         });
      }else{
         arrayElements.forEach((item, index)=>{
             if(showVector[index]){
-                let li = document.createElement("li");
-                li.classList = "card d-flex flex-row align-items-center justify-content-between p-4 m-2";
-                li.innerHTML = `
-                    <span class="font-monospace card-title fs-5 text-center fw-bold">
-                        ${item.content}
-                    </span>
-                    <span class="form-switch d-flex align-items-center">
-                        <input type="checkbox" class="form-check-input m-1" id="complete-${index}" onclick="updateCheck(arrayElements[${index}])">
-                        <button class="btn btn-danger m-1" onclick="deleteElement(${index})">x</button>
-                        <button class="btn btn-success m-1" onclick="openEdit(${index})">Edit</button>
-                    </span>
-                `;
-                list.appendChild(li);
-               if(item.checked){
-                    const strCheck = `#complete-${index}`;
-                    document.querySelector(strCheck).checked = true;
-                }
+                renderCard(item, index);
             }
         })
      }
@@ -117,12 +106,19 @@ function updateCheck(element){
     }
  }
 
- function openEdit(index){
-    edit.innerHTML = `
-    Tarea
-    <input type="text" placeholder="Introduce el nombre de la tarea" id="input-name">
-    <button id="submit-edit" class="submit-edit" onclick="submitEdit(${index})">Cambiar</button>
-    `
+ function openEdit(index, id){
+    let li = document.getElementById(id);
+    if(li.childElementCount === 1){
+        let div = document.createElement("div");
+        div.classList = "card m-0 mt-2 mb-2 bg-dark";
+        div.innerHTML =`
+            <input type="text" placeholder="Introduce el nombre de la tarea" id="input-name">
+            <button id="submit-edit" class="submit-edit" onclick="submitEdit(${index})">Cambiar</button>
+        `;
+        li.appendChild(div);
+    }else{
+        li.children[1].remove();
+    }
  }
  function submitEdit(index){
     arrayElements[index].content = document.querySelector("#input-name").value;
@@ -158,3 +154,4 @@ function updateCheck(element){
     });
     updateList(showVector);
  }
+

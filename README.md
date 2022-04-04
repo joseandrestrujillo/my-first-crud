@@ -8,11 +8,11 @@ This is my first CRUD project and it is based on JavaScript Vanilla. I have trie
 - All items will be save on the localStorage.
 
 ## The project's structure
-This project has been developed with the MVC pattern. I decide to use it because, without it, the code turn into usually knows "espagueti code" and it could be unscalable and hard to maintain. To implement the pattern I have created four JavaScript files:
+This project has been developed with the MVC pattern. I decide to use it because, without it, the code turn into usually knows as "espagueti code" and it could be unscalable and hard to maintain. To implement the pattern I have created four JavaScript files:
 - **"view.js"**: This file contains the class View. Its function is controlate the interface and manipulate the DOM.
 - **"model.js"**: This file contains the class Model. Its function is process the data from the controler and save/load/edit the local storage data.
 - **"controller.js"**: This file contains the class Controller. Its function is process user interaction with the DOM and controlate the model and view actions.
 - **"main.js"**: This is the main file and contains the Model, View and Controller implements. Its function is link the model, the view and the controller.
 
 ## The project's interface
-The project's interface has been developed with a CSS framework know as Bootstrap. 
+The project's interface has been developed with a CSS framework knowm as Bootstrap. 
